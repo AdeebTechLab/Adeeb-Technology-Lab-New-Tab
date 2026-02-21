@@ -1,0 +1,236 @@
+/* Adeeb Tech Lab - Modern Responsive Styles */
+:root {
+  --primary: #163042;
+  --bg: #eef2f7;
+  --card: #fff;
+  --radius: 16px;
+  --shadow: 0 8px 25px rgba(0,0,0,0.08);
+  --accent: #1e90ff;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+}
+.atl-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+.atl-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0 1rem 0;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.atl-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+.header-btn {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.header-btn:hover {
+  background: var(--accent);
+}
+.atl-main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+}
+.atl-info-panel {
+  flex: 1 1 220px;
+  min-width: 220px;
+  max-width: 300px;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+  height: fit-content;
+}
+.timer-box {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  font-size: 1.2rem;
+}
+.time {
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+.date-box {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  color: #888;
+}
+.location-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+.loc-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  color: var(--primary);
+}
+.atl-phone-panel {
+  flex: 2 1 400px;
+  min-width: 320px;
+  max-width: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.atl-phone-iframe {
+  width: 100%;
+  min-width: 320px;
+  max-width: 400px;
+  height: 600px;
+  border-radius: var(--radius);
+  border: none;
+  box-shadow: var(--shadow);
+  background: #fff;
+}
+.atl-search-panel {
+  flex: 1 1 220px;
+  min-width: 220px;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: flex-start;
+}
+.search-container {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 0.75rem 1rem;
+}
+.search-container input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background: transparent;
+}
+.search-container button {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background 0.2s;
+}
+.search-container button:hover {
+  background: var(--accent);
+}
+.atl-apps-panel {
+  width: 100%;
+  margin-top: 2rem;
+}
+.more-app {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+.app-box {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.more-apps {
+  display: flex;
+  gap: 2rem;
+}
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--card);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.app:hover {
+  box-shadow: 0 8px 32px rgba(30,144,255,0.15);
+  transform: translateY(-4px) scale(1.04);
+}
+@media (max-width: 900px) {
+  .atl-main {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .atl-info-panel, .atl-search-panel, .atl-phone-panel {
+    max-width: 100%;
+    min-width: 0;
+  }
+  .atl-phone-iframe {
+    max-width: 100%;
+    min-width: 0;
+    height: 400px;
+  }
+}
+@media (max-width: 600px) {
+  .atl-header {
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem 0.5rem;
+  }
+  .atl-main {
+    gap: 1rem;
+  }
+  .atl-info-panel, .atl-search-panel {
+    padding: 1rem 0.5rem;
+  }
+  .atl-phone-iframe {
+    height: 320px;
+  }
+  .app {
+    padding: 0.5rem 0.75rem;
+  }
+}

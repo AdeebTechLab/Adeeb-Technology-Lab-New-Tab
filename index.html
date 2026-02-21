@@ -4,423 +4,449 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Adeeb Tech Lab</title>
-<link rel="icon" type="image/ATLabLogo.png" href="ATLabLogo.png" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    />
-    
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 <style>
-    body{
-        margin:0;
-        font-family:Arial, sans-serif;
-        background:#fff;
-        color:#1b1b1b;
-        text-align:center;
-        
-    }
-    header{
-        display:flex;
-        justify-content:space-between;
-        padding:20px 40px;
-        align-items:center;
-    }
-    .logo-area{
-        display:flex;
-        align-items:center;
-        gap:10px;
-        font-size:24px;
-        margin: 0 auto;
-        font-weight:bold;
-    }
+  :root{
+--primary:#0f172a;
+--accent:#3b82f6;
+--bg-gradient:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+--glass:rgba(255,255,255,0.08);
+--radius:18px;
+--shadow:0 20px 40px rgba(0,0,0,0.25);
+--blur:blur(16px);
+}
 
-    /* Header buttons (appear inside header, not fixed) */
-    .header-btn {
-      position: static;
-      padding: 8px 14px;
-      border-radius: 8px;
-      background-color: #163042;
-      color: #fff;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-    }
-    .header-btn.left { margin-right: 10px; }
-    .header-btn.right { margin-left: 10px; }
-    .logo{
-        width:60px;
-        height:60px;
-        border-radius:50%;
-        background:#eee;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-    }
-    /* button{
-        background:#163042;
-        color:#fff;
-        border:none;
-        padding:10px 18px;
-        border-radius:10px;
-        cursor:pointer;
-        font-size:16px;
-    } */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
-    /* TIMER */
-    .timer-box{
-        display:flex;
-        justify-content:center;
-        gap:10px;
-        margin-top:15px;
-        margin-left: 410px;
-    }
-    .time{
-        background:#fff;
-        border-radius:15px;
-        padding:20px;
-        width:90px;
-        box-shadow:0 2px 10px rgba(0,0,0,0.1);
-        font-size:45px;
-        font-weight:bold;
-    }
-    .date-box{
-        margin-left:20px;
-        background:#fff;
-        padding:11px;
-        border-radius:15px;
-        box-shadow:0 2px 10px rgba(0,0,0,0.1);
-        font-size:18px;
-        font-weight: 500;
-        width: 257px;
-         height:21px;
-    }
+body{
+font-family:'Poppins',sans-serif;
+background:var(--bg-gradient);
+min-height:100vh;
+display:flex;
+flex-direction:column;
+color:white;
+}
 
-    .location-area{
-        margin-top:-41px;
-        display:flex;
-        justify-content:center;
-        gap:10px;
-        margin-left: 850px;
-    }
-    .loc-box{
-        background:#163042;
-        color:white;
-        padding:7px 19px;
-        border-radius:10px;
-        font-size:14px;
-    }
+/* HEADER */
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 5%;
+backdrop-filter:var(--blur);
+background:var(--glass);
+box-shadow:0 8px 30px rgba(0,0,0,0.2);
+border-bottom:1px solid rgba(255,255,255,0.1);
+}
 
-    /* SEARCH */
-    .search-container{
-        margin-top:-245px;
-        display:flex;
-        justify-content:center;
-        gap:10px;
-        margin-left: 447px;
-    }
-    .search-container input{
-        width:535px;
-        height:45px;
-        padding-left:20px;
-        border-radius:20px;
-        border:1px solid #ccc;
-        font-size:16px;
-    }
-    #searchBtn, #voiceBtn{
-        width:45px;
-        height:45px;
-        border-radius:12px;
-        background:#163042;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        cursor:pointer;
-        color:#fff;
-        font-size:20px;
-    }
+.logo-area{
+display:flex;
+align-items:center;
+gap:12px;
+font-weight:600;
+font-size:18px;
+letter-spacing:0.5px;
+}
 
-    /* MORE APPS */
-    .more-app{
-        margin-top:50px;
-        font-size:22px;
-        font-weight:bold;
-        margin-left: 440px;
-    }
-    .app-box{
-        margin-top:20px;
-        display:flex;
-        justify-content:center;
-        gap:40px;
-        margin-left: 440px;
-    }
-    .app-item{
-        padding:20px;
-        background:#fff;
-        width:140px;
-        border-radius:15px;
-       box-shadow:0 2px 10px rgba(0,0,0,0.1);
-        cursor:pointer;
-        font-size:16px;
-        font-weight:bold;
-        color:#163042;
-    }
+.header-btn{
+padding:8px 18px;
+border:none;
+border-radius:12px;
+background:linear-gradient(135deg,#3b82f6,#2563eb);
+color:white;
+cursor:pointer;
+transition:all .3s ease;
+}
 
-    .more-apps{
-        display:flex;
-        gap:12px;
-        justify-content:center;
-      }
-      .app{
-        background:var(--card);
-        padding:10px;
-        border-radius:10px;
-        box-shadow:var(--shadow);
-        min-width:84px;
-        text-align:center;
-        cursor:pointer;
-      }
-      .app:hover{
-        
-        box-shadow:var(--shadow-hover);
-      }
-      .iframe{
-        margin-top:-100px;
-        margin-left: -750px;
-        width:350px;
-        height:500px;
-        border-radius:15px;
-        box-shadow:0 2px 10px rgba(0,0,0,0.1);
-      }
+.header-btn:hover{
+transform:translateY(-3px);
+box-shadow:0 10px 20px rgba(59,130,246,0.4);
+}
 
-      
+/* MAIN */
+.main-layout{
+flex:1;
+display:flex;
+gap:40px;
+padding:40px 6%;
+}
 
-    /* SOCIAL ICONS */
-    .socials{
-        position: fixed;
-        bottom: 22px; /* center vertically with corner buttons */
-        left: 50%;
-        transform: translateX(-50%);
-        display:flex;
-        gap:18px;
-        font-size:26px;
-        cursor:pointer;
-        color: #163042;
-        z-index: 998; /* below corner buttons */
-        align-items:center;
-    }
-    .socials a{
-        color:inherit;
-        text-decoration:none;
-        display:inline-flex;
-        align-items:center;
-        justify-content:center;
-        width:36px;
-        height:36px;
-        border-radius:6px;
-    }
-    .socials a:hover{ background: rgba(22,48,66,0.06); }
+/* LEFT SIDE */
+.lms-section{
+min-width:280px;
+flex:1;
+display:flex;
+flex-direction:column;
+gap:20px;
+}
 
-    /* Responsive: reduce sizes on narrow screens */
-    @media (max-width: 600px) {
-      .corner-btn { padding: 8px 12px; bottom: 16px; }
-      .corner-btn.left-bottom { left: 12px; }
-      .corner-btn.right-bottom { right: 12px; }
-      .socials { font-size:20px; gap:12px; bottom: 18px; }
-    }
+.lms-card{
+background:var(--glass);
+backdrop-filter:var(--blur);
+border-radius:var(--radius);
+padding:18px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:var(--shadow);
+transition:.3s ease;
+border:1px solid rgba(255,255,255,0.1);
+}
 
-    /* Footer corner buttons — place at bottom and responsive */
-    .corner-btn {
-      position: fixed;
-      bottom: 20px;
-      padding: 10px 16px;
-      border-radius: 12px;
-      background: var(--mustard);
-      color: #ffffff;
-      background-color: #163042;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-      z-index: 999;
-      transition: transform 0.2s ease;
-    }
-    .corner-btn:hover {
-      transform: translateY(-2px);
-    }
-    .corner-btn.left-bottom {
-      left: 20px;
-    }
-    .corner-btn.right-bottom {
-      right: 20px;
-    }
+.lms-card:hover{
+transform:translateY(-6px);
+}
+
+.lms-icon{
+width:45px;
+}
+
+.lms-info h4{
+font-size:15px;
+margin-bottom:4px;
+}
+
+.lms-info p{
+font-size:12px;
+opacity:0.7;
+}
+
+.lms-login-btn{
+padding:7px 14px;
+border:none;
+border-radius:10px;
+background:var(--accent);
+color:white;
+cursor:pointer;
+transition:.3s;
+}
+
+.lms-login-btn:hover{
+background:#2563eb;
+}
+
+/* RIGHT CONTENT */
+.content-section{
+flex:2;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:25px;
+}
+
+.timer-box{
+display:flex;
+gap:15px;
+}
+
+.time{
+background:var(--glass);
+backdrop-filter:var(--blur);
+padding:20px;
+border-radius:16px;
+font-size:28px;
+min-width:70px;
+text-align:center;
+box-shadow:var(--shadow);
+border:1px solid rgba(255,255,255,0.1);
+}
+
+.date-box{
+background:var(--glass);
+padding:8px 16px;
+border-radius:14px;
+box-shadow:var(--shadow);
+font-size:14px;
+border:1px solid rgba(255,255,255,0.1);
+}
+
+.location-area{
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+}
+
+.loc-box{
+background:linear-gradient(135deg,#3b82f6,#1e3a8a);
+color:white;
+padding:8px 14px;
+border-radius:12px;
+font-size:13px;
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+}
+
+.search-container{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.search-container input{
+width:300px;
+max-width:90%;
+height:42px;
+padding-left:15px;
+border-radius:25px;
+border:none;
+outline:none;
+background:rgba(255,255,255,0.15);
+color:white;
+backdrop-filter:var(--blur);
+}
+
+#searchBtn,#voiceBtn{
+width:42px;
+height:42px;
+border:none;
+border-radius:12px;
+background:linear-gradient(135deg,#3b82f6,#1d4ed8);
+color:white;
+cursor:pointer;
+transition:.3s;
+}
+
+#searchBtn:hover,#voiceBtn:hover{
+transform:translateY(-3px);
+}
+
+.more-app{
+font-weight:600;
+font-size:18px;
+margin-top:10px;
+}
+
+.app-box{
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.app{
+background:var(--glass);
+padding:12px 20px;
+border-radius:14px;
+box-shadow:var(--shadow);
+cursor:pointer;
+transition:.3s;
+border:1px solid rgba(255,255,255,0.1);
+}
+
+.app:hover{
+transform:translateY(-5px);
+background:rgba(255,255,255,0.15);
+}
+
+/* FOOTER */
+footer{
+padding:15px;
+backdrop-filter:var(--blur);
+background:var(--glass);
+border-top:1px solid rgba(255,255,255,0.1);
+}
+
+.footer-buttons{
+display:flex;
+justify-content:center;
+gap:15px;
+flex-wrap:wrap;
+}
+
+.footer-btn{
+padding:8px 18px;
+border:none;
+border-radius:12px;
+background:linear-gradient(135deg,#3b82f6,#1d4ed8);
+color:white;
+cursor:pointer;
+transition:.3s;
+}
+
+.footer-btn:hover{
+transform:translateY(-3px);
+}
+
+/* RESPONSIVE */
+@media(max-width:1000px){
+.main-layout{
+flex-direction:column;
+padding:30px 5%;
+}
+.lms-section{
+width:100%;
+}
+.content-section{
+width:100%;
+}
+.timer-box{
+justify-content:center;
+}
+}
+
+@media(max-width:500px){
+.logo-area{
+font-size:15px;
+}
+.time{
+font-size:22px;
+padding:15px;
+}
+.search-container input{
+width:100%;
+}
+}
 
 </style>
 </head>
+
 <body>
 
 <header>
-<button class="header-btn left" onclick="window.open('https://google.com','_blank')" aria-label="Open Google in new tab">Google</button>
+<!-- <button class="header-btn" onclick="window.open('https://google.com','_blank')">Google</button> -->
+ <button class="header-btn" id="googleBtn">Google</button>
 
-    <div class="logo-area">
-        <div class="logo">
-          <img src="Assets/ATLabLogo.png" alt="logo" width="50" height="50">
-        </div>
-       
-        Adeeb Technology Lab
-    </div>
+<div class="logo-area">
+<img src="Assets/ATLabLogo.png" width="40">
+Adeeb Technology Lab
+</div>
 
-    <button class="header-btn right" onclick="window.open('https://tasks.google.com/tasks','_blank')" aria-label="Open Todo List in new tab">Todo List</button>
+<!-- <button class="header-btn" onclick="window.open('https://tasks.google.com/tasks','_blank')">Todo</button> -->
+ <button class="header-btn" id="todoBtn">Todo</button>
+
 </header>
 
-<!-- TIMER -->
-<div class="timer-box">
-    <div class="time"><span id="hrs">00</span> <br> </div>
-    <div class="time"><span id="min">00</span> <br> </div>
-    <div class="time"><span id="sec">00</span> <br> </div>
+<div class="main-layout">
 
-    <span class="date-box" id="todayDate"></span>
+<!-- LEFT -->
+<div class="lms-section">
+
+<div class="lms-card">
+<img src="Assets/student.png" class="lms-icon">
+<div class="lms-info">
+<h4>Student</h4>
+<p>Enrolled learners</p>
+<div class="lms-stats">👍 3.4K 🎓 40 📄 186 👁 176</div>
 </div>
+<a href="https://lms-adeeb-technology-lab.vercel.app/login" target="_blank">
+<button class="lms-login-btn">Login</button>
+</a>
+</div>
+
+<div class="lms-card">
+<img src="Assets/internship.png" class="lms-icon">
+<div class="lms-info">
+<h4>Internship</h4>
+<p>Internship Program</p>
+<div class="lms-stats">👍 5.9K 💻 18 📄 266 👁 341</div>
+</div>
+<a href="https://lms-adeeb-technology-lab.vercel.app/login" target="_blank">
+<button class="lms-login-btn">Login</button>
+</a>
+</div>
+
+<div class="lms-card">
+<img src="Assets/job.png" class="lms-icon">
+<div class="lms-info">
+<h4>Job & Freelancing</h4>
+<p>Remote employees</p>
+<div class="lms-stats">👍 6.2K 🔍 24 💰 379 👁 7.3K</div>
+</div>
+<a href="https://lms-adeeb-technology-lab.vercel.app/login" target="_blank">
+<button class="lms-login-btn">Login</button>
+</a>
+</div>
+
+</div>
+
+<!-- RIGHT -->
+<div class="content-section">
+
+<div class="timer-box">
+<div class="time" id="hrs">00</div>
+<div class="time" id="min">00</div>
+<div class="time" id="sec">00</div>
+</div>
+
+<div class="date-box" id="todayDate"></div>
 
 <div class="location-area">
-    <div class="loc-box">
-        <i class="fa-solid fa-temperature-three-quarters"></i>
-            <span id="tempVal">30°C</span></div>
-    <div class="loc-box">
-         <i class="fa-solid fa-location-dot"></i>
-        <span id="location">Detecting location...</span>
-    </div>
+<div class="loc-box"><i class="fa-solid fa-temperature-three-quarters"></i> <span id="tempVal">--°C</span></div>
+<div class="loc-box"><i class="fa-solid fa-location-dot"></i> Bahawalpur</div>
 </div>
 
-<div>
-     <iframe class="iframe" src="Phone/index.html" frameborder="0"></iframe>
-
+<div class="search-container">
+<input type="text" id="searchInput" placeholder="Search anything...">
+<button id="voiceBtn"><i class="fa-solid fa-microphone"></i></button>
+<button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
 </div>
-  
-<!-- SEARCH -->
 
- <div class="search-container">
-          <input
-            type="text"
-            id="searchInput"
-            placeholder="Search anything here..."
-          />
-          <button id="voiceBtn"><i class="fa-solid fa-microphone"></i></button>
-          <button id="searchBtn">
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
+<div class="more-app">More Apps</div>
 
-          </div>
+<!-- <div class="app-box">
+<div class="app" onclick="window.open('https://adeeb-technology-lab.blogspot.com/search/label/Extension')">Extension</div>
+<div class="app" onclick="window.open('https://adeeb-technology-lab.blogspot.com/search/label/Software')">Software</div>
+<div class="app" onclick="window.open('https://adeeb-technology-lab.blogspot.com/search/label/Application')">Mobile App</div>
+</div> -->
 
-
-<!-- MORE APPS -->
-<div class="more-app">More App</div>
-<hr style="width:40%;margin:auto;margin-top:10px;margin-right:215px;">
- 
 <div class="app-box">
-     <div class="more-apps">
-          <div class="app" onclick="window.open('https://adeeb-technology-lab.blogspot.com/search/label/Extension')"><img src="Assets/charome.png" alt="Extension" style="width:28px;height:28px"><div style="font-size:13px;margin-top:6px">Extension</div></div>
-          <div class="app" onclick="window.open('https://adeeb-technology-lab.blogspot.com/search/label/Software')"><img src="Assets/softwaer.png" alt="Software" style="width:28px;height:28px"><div style="font-size:13px;margin-top:6px">Software</div></div>
-          <div class="app" onclick="window.open('https://adeeb-technology-lab.blogspot.com/search/label/Application')"><img src="Assets/app.png" alt="Mobile App" style="width:28px;height:28px"><div style="font-size:13px;margin-top:6px">Mobile App</div></div>
-         </div> 
-         </div> 
+  <div class="app" id="extensionBtn">Extension</div>
+  <div class="app" id="softwareBtn">Software</div>
+  <div class="app" id="mobileBtn">Mobile App</div>
+</div>
 
 
-
-
-         
-
-
+</div>
+</div>
 
 <footer>
-<button class="corner-btn left-bottom" onclick="window.open('https://salmanadeeb.wixsite.com/livechat','_blank')" aria-label="Live Chat (opens in new tab)">Live Chat</button>
-    
-<!-- SOCIAL -->
-<div class="socials" aria-label="social links">
-            <a href="https://www.facebook.com/AdeebTechnologyLab" aria-label="facebook" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook"></i></a>
-            <a href="https://twitter.com/" aria-label="twitter" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="https://www.instagram.com/adeebtechlab" aria-label="instagram" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://www.linkedin.com/" aria-label="linkedin" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin"></i></a>
-            <a href="https://www.youtube.com/@AdeebTechLab" aria-label="youtube" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-youtube"></i></a>
-            <a href="https://whatsapp.com/channel/0029VaCeeBg4inos1Eqtbc43" aria-label="whatsapp" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i></a>
-          </div>
-          
-<button class="corner-btn right-bottom" onclick="window.open('https://chat.openai.com/','_blank')" aria-label="AI tools (opens in new tab)">AI Tools</button>
+<div class="footer-buttons">
+<!-- <button class="footer-btn" onclick="window.open('https://salmanadeeb.wixsite.com/livechat','_blank')">Live Chat</button>
+<button class="footer-btn" onclick="window.open('https://chat.openai.com/','_blank')">AI Tools</button>
+</div> -->
+
+<button class="footer-btn" id="liveChatBtn">Live Chat</button>
+<button class="footer-btn" id="aiToolsBtn">AI Tools</button>
+
 
 </footer>
 
-<script>
-/* CLOCK */
+<script src="js/newtab.js"></script>
+
+
+<!-- <script>
 function updateClock(){
-    let now = new Date();
-    document.getElementById("hrs").innerText = now.getHours();
-    document.getElementById("min").innerText = now.getMinutes();
-    document.getElementById("sec").innerText = now.getSeconds();
-
-    document.getElementById("todayDate").innerText =
-        now.toLocaleDateString('en-GB', {
-            weekday:'long',
-            day:'2-digit',
-            month:'long',
-            year:'numeric'
-        });
+let now=new Date();
+document.getElementById("hrs").innerText=String(now.getHours()).padStart(2,"0");
+document.getElementById("min").innerText=String(now.getMinutes()).padStart(2,"0");
+document.getElementById("sec").innerText=String(now.getSeconds()).padStart(2,"0");
+document.getElementById("todayDate").innerText=
+now.toLocaleDateString('en-GB',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
 }
-setInterval(updateClock, 1000);
+setInterval(updateClock,1000);
+updateClock();
 
-/* SEARCH FUNCTION */
- const searchInput = document.getElementById("searchInput");
-  const searchBtn = document.getElementById("searchBtn");
+document.getElementById("searchBtn").onclick=function(){
+let q=document.getElementById("searchInput").value.trim();
+if(q) window.open("https://www.google.com/search?q="+encodeURIComponent(q),"_self");
+};
 
-  searchBtn.onclick = () => {
-    const q = searchInput.value.trim();
-    if (q) window.open(`https://www.google.com/search?q=${encodeURIComponent(q)}`, "_self");
-  };
-
-  searchInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      const q = searchInput.value.trim();
-      if (q) window.open(`https://www.google.com/search?q=${encodeURIComponent(q)}`, "_self");
-    }
-  });
-
-  /* VOICE SEARCH */
-   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (SpeechRecognition) {
-    const recog = new SpeechRecognition();
-    document.getElementById("voiceBtn").onclick = () => {
-      recog.start();
-    };
-    recog.onresult = (e) => {
-      document.getElementById("searchInput").value = e.results[0][0].transcript;
-    };
-  } else {
-    document.getElementById("voiceBtn").style.display = "none";
-  }
-/* LOCATION & WEATHER */
-
-
-
-function fetchOpenMeteoWeather() {
-  const url = "https://api.open-meteo.com/v1/forecast?latitude=29.3956&longitude=71.6833&current_weather=true";
-  console.log(url);
-  fetch(url)
-    .then(res => res.json())
-    .then(data => {
-      const w = data.current_weather;
-      document.getElementById("tempVal").innerText = Math.round(w.temperature) + "°C";
-    })
-    .catch(err => {
-      console.error(err);
-      document.getElementById("location").innerText = "Weather error";
-    });
+function fetchWeather(){
+fetch("https://api.open-meteo.com/v1/forecast?latitude=29.3956&longitude=71.6833&current_weather=true")
+.then(res=>res.json())
+.then(data=>{
+document.getElementById("tempVal").innerText=Math.round(data.current_weather.temperature)+"°C";
+});
 }
-
-fetchOpenMeteoWeather();
- 
-</script>
+fetchWeather();
+</script> -->
 
 </body>
 </html>

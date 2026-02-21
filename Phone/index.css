@@ -1,10 +1,23 @@
        /* Home Page CSS Code  */
 
        body {
+
+        width: 350px;
+    height: 100vh;
+    background-color: white;
+    justify-content: center;
            margin: 0;
            font-family: Arial;
-           background: #f7f7f7;
-           padding-bottom: 70px;
+           padding-bottom: 0;
+           overflow: hidden;
+       }
+
+       /* Make the app content the single scrollable area so only one scrollbar appears */
+       .app-content {
+           height: 100vh;
+           overflow: auto;
+           -webkit-overflow-scrolling: touch;
+           padding-bottom: 0; /* page elements provide footer spacing */
        }
 
        header {
@@ -359,8 +372,13 @@
        .page {
            display: none;
            position: relative;
-           min-height: 100vh;
+           /* subtract footer height so pages don't exceed viewport and create extra white space */
+           min-height: calc(100vh - 70px);
+           padding-bottom: 70px;
+           overflow: hidden;
        }
+
+       
 
        .page.active {
            display: block;
@@ -372,6 +390,8 @@
            background-size: cover;
            background-attachment: fixed;
        }
+
+       
 
 
        .download-card {
@@ -388,6 +408,11 @@
 
            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
        }
+
+       .dws-title {
+    color: white;
+    margin-bottom: 20px;
+}
 
 
        .download-card h4 {
@@ -483,28 +508,40 @@
            box-sizing: border-box;
            font-family: Arial, sans-serif;
        }
+    
 
 
-       .profile-page {
+       /* .profile-page {
            height: 100vh;
            position: relative;
            background: #000;
            color: #fff;
-       }
+           overflow: hidden;
+       } */
+
+       .profile-page {
+    min-height: 100vh;
+    position: relative;
+    background: #000;
+    color: #fff;
+}
+
+
 
 
        .bg-one {
            height: 26vh;
-           background: url("Assets/trofy.jpg") no-repeat top center/cover;
-           /* clip-path: polygon(1 0, 100% 0, 100% 70%, 70% 100%, 0 100%); */
-       }
+           background: url("assets/trofy.jpg") no-repeat top center/cover;
+           clip-path: polygon(1 0, 100% 0, 100% 70%, 70% 100%, 0 100%);  
+       } 
+
 
 
        .profile-pic {
            width: 110px;
            height: 110px;
            border-radius: 50%;
-           border: 4px solid #f5c400;
+           /* border: 4px solid #f5c400; */
            position: absolute;
            top: 17vh;
            left: 16px;
@@ -515,13 +552,24 @@
 
 
        .bg-two {
-           height: 65vh;
-           background: url("Assets/download.jpg") no-repeat center/cover;
+           min-height: 75vh;
+           background-image: url("Assets/download.jpg");
+           background-repeat: no-repeat;
+           background-position: center;
+           background-size: cover;
            clip-path: polygon(1 30%, 30% 0, 100% 0, 100% 100%, 0 100%);
-           padding-top: 70px;
+           padding-top: 50px;
+           padding-bottom: 90px;
            display: flex;
            flex-direction: column;
            justify-content: space-between;
+       }
+
+
+       .dwn-title {
+           color: white;
+           margin-bottom: 20px;
+           padding-top: 15px;
        }
 
 
@@ -533,6 +581,7 @@
            font-size: 20px;
            margin-bottom: 4px;
        }
+
 
        .role {
            font-size: 13px;
@@ -561,6 +610,7 @@
            max-width: 300px;
        }
 
+       
 
        .profile-footer {
            font-size: 10px;
@@ -586,7 +636,7 @@
        }
 
        .about-container {
-           background: #fff;
+           background: #ffffff;
            margin: 0 14px;
            border-radius: 14px;
            padding-bottom: 18px;
@@ -606,8 +656,9 @@
 
 
        .about-text {
-           text-align: center;
-           font-size: 13px;
+           text-align: justify;
+           font-size: 11px;
+           color: grey;
            line-height: 1.7;
            padding: 0 18px;
        }
@@ -627,6 +678,7 @@
            border-radius: 14px;
            margin-bottom: 12px;
        }
+
 
        .about-link img {
            width: 50px;
@@ -676,7 +728,7 @@
        @media (min-width: 768px) {
 
            .bg-one {
-               height: 350px;
+               height: 250px;
                background: url("Assets/trofy.jpg") no-repeat center center;
                background-size: cover;
                background-color: #000;
@@ -719,3 +771,115 @@
                object-fit: contain
            }
        }
+
+
+       /* LMS CSS */
+       
+       .lms-container {
+    padding: 15px;
+    background: #3e4a59;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.lms-title {
+    color: white;
+    margin-bottom: 20px;
+}
+
+.lms-card {
+    background: white;
+    border-radius: 20px;
+    padding: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.lms-icon {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+}
+
+.lms-info {
+    flex: 1;
+}
+
+.lms-info h4 {
+    margin: 0;
+}
+
+.lms-info p {
+    margin: 1px 0;
+    color: gray;
+}
+
+.lms-stats {
+    font-size: 10px;
+    margin-top: 6px;
+}
+
+.lms-login-btn {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+
+
+/* Width */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Track (background area) */
+::-webkit-scrollbar-track {
+    background: #2f3b4a;
+}
+
+/* Handle (scroll moving part) */
+::-webkit-scrollbar-thumb {
+    background: #b5892b;
+    border-radius: 10px;
+}
+
+/* Hover effect */
+::-webkit-scrollbar-thumb:hover {
+    background: #9f7622;
+}
+
+
+/* Full Scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+/* Track (background area) */
+::-webkit-scrollbar-track {
+    background: #2f3b4a;
+    border-radius: 20px;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.4);
+    margin: 6px 0;
+}
+
+/* Thumb (moving part) */
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(145deg, #d4a73a, #9f7622);
+    border-radius: 20px;
+    border: 2px solid #2f3b4a;
+    box-shadow: 
+        0 4px 8px rgba(0,0,0,0.4),
+        inset 0 2px 4px rgba(255,255,255,0.3);
+    transition: 0.3s ease;
+}
+
+/* Hover effect */
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(145deg, #e5b94a, #b5892b);
+    transform: scale(1.05);
+}
