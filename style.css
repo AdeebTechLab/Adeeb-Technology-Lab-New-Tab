@@ -313,7 +313,7 @@ header {
   border-radius: calc(var(--radius) + 2px);
   padding: 2px;
   /* Single highlight "bar" that runs around the outline */
-  background: conic-gradient(#e9ad07 0deg 360deg);
+  background: conic-gradient(#ff8e01 0deg 360deg);
   rgba(255, 142, 1, 0) 0deg 342deg,
   rgba(255, 142, 1, 1) 342deg 348deg,
   rgba(189, 43, 17, 0.45) 348deg 356deg,

@@ -105,20 +105,101 @@ function attachCameraAndAiMode() {
 }
 
 /* LOCATION & WEATHER */
-function fetchOpenMeteoWeather() {
-  const url = "https://api.open-meteo.com/v1/forecast?latitude=29.3956&longitude=71.6833&current_weather=true";
+const DEFAULT_LOCATION_MSG = 'Location unavailable';
+
+function setTempValue(temp) {
+  const tv = document.getElementById("tempVal");
+  if (!tv) return;
+  if (typeof temp === 'number' && Number.isFinite(temp)) {
+    tv.innerText = `${Math.round(temp)}°C`;
+  } else {
+    tv.innerText = '--°C';
+  }
+}
+
+function setLocationLabel(label) {
+  const loc = document.getElementById("locationName");
+  if (!loc) return;
+  loc.innerText = label || DEFAULT_LOCATION_MSG;
+}
+
+function updateWeatherForCoords(lat, lon) {
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`;
   fetch(url)
     .then(res => res.json())
     .then(data => {
-      const w = data.current_weather;
-      const tv = document.getElementById("tempVal");
-      if (tv) tv.innerText = Math.round(w.temperature) + "Â°C";
+      const w = data?.current_weather;
+      if (w) {
+        setTempValue(w.temperature);
+      }
     })
     .catch(err => {
-      console.error(err);
-      const loc = document.getElementById("location");
-      if (loc) loc.innerText = "Weather error";
+      console.error('Weather fetch failed:', err);
+      setTempValue(NaN);
     });
+}
+
+function reverseGeocodeCoords(lat, lon, fallbackLabel) {
+  if (fallbackLabel) {
+    setLocationLabel(fallbackLabel);
+  }
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
+  const url = `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&language=en&count=1`;
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      const place = data.results && data.results[0];
+      if (place) {
+        const parts = [place.name, place.admin1, place.country].filter(Boolean);
+        setLocationLabel(parts.join(', '));
+      }
+    })
+    .catch(err => {
+      console.error('Location reverse geocode failed:', err);
+    });
+}
+
+function processCoordinates(lat, lon, hintLabel) {
+  updateWeatherForCoords(lat, lon);
+  reverseGeocodeCoords(lat, lon, hintLabel);
+}
+
+function fallbackToIpLocation() {
+  fetch('https://ipapi.co/json/')
+    .then(res => res.json())
+    .then(data => {
+      const lat = Number(data.latitude);
+      const lon = Number(data.longitude);
+      const parts = [data.city, data.region, data.country_name].filter(Boolean);
+      const label = parts.join(', ') || DEFAULT_LOCATION_MSG;
+      setLocationLabel(label);
+      processCoordinates(lat, lon, label);
+    })
+    .catch(err => {
+      console.error('IP fallback failed:', err);
+      setLocationLabel(DEFAULT_LOCATION_MSG);
+      setTempValue(NaN);
+    });
+}
+
+function handleGeolocationError(err) {
+  console.warn('Geolocation error:', err);
+  setLocationLabel('Using approximate location');
+  fallbackToIpLocation();
+}
+
+function initLocationAndWeather() {
+  if ('geolocation' in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => processCoordinates(pos.coords.latitude, pos.coords.longitude),
+      handleGeolocationError,
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
+  } else {
+    setLocationLabel('Geolocation not supported');
+    fallbackToIpLocation();
+  }
 }
 
 /* INIT on DOM ready */
@@ -127,7 +208,7 @@ function initNewTab() {
   attachSearchHandlers();
   attachVoice();
   attachCameraAndAiMode();
-  fetchOpenMeteoWeather();
+  initLocationAndWeather();
   updateClock();
   setInterval(updateClock, 1000);
   loadPhoneUI();
