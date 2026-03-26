@@ -220,14 +220,16 @@
     }
 
     .google-app-icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 9px;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(255, 255, 255, 0.08);
-      overflow: hidden;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     .google-app-item span:last-child {
@@ -240,15 +242,13 @@
     .google-app-icon img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      border-radius: 9px;
+      object-fit: contain;
       display: block;
     }
 
     .google-app-item:hover {
-      transform: translateY(-2px);
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(255, 255, 255, 0.08);
+      transform: scale(1.05);
+      background: transparent;
     }
 
 
