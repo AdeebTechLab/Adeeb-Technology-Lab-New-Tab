@@ -314,6 +314,7 @@ function initTaskDrawer() {
   const overlay = document.getElementById('taskDrawerOverlay');
   const closeBtn = document.getElementById('closeTaskDrawer');
   const input = document.getElementById('taskInput');
+  const timeInput = document.getElementById('taskTimeInput');
   const addBtn = document.getElementById('addTaskBtn');
   const list = document.getElementById('taskList');
   const storageKey = 'daily_tasks_v1';
@@ -370,12 +371,13 @@ function initTaskDrawer() {
 
       list.innerHTML = tasks.map(task => {
         const safeText = String(task.text || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        const safeTime = task.time ? `<span class="task-time-badge"><i class="fa-regular fa-clock"></i> ${String(task.time).replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span>` : '';
         const doneClass = task.done ? 'done' : '';
         const doneIcon = task.done ? 'fa-check' : 'fa-circle';
         return `
           <div class="task-item" data-id="${task.id}">
             <button class="task-check-btn ${doneClass}" type="button" title="Complete"><i class="fa-solid ${doneIcon}"></i></button>
-            <div class="task-text ${doneClass}">${safeText}</div>
+            <div class="task-text ${doneClass}">${safeText}${safeTime}</div>
             <button class="task-delete-btn" type="button" title="Delete"><i class="fa-solid fa-trash"></i></button>
           </div>
         `;
@@ -386,10 +388,21 @@ function initTaskDrawer() {
   function addTask() {
     const text = input.value.trim();
     if (!text) return;
+
+    let displayTime = '';
+    if (timeInput && timeInput.value) {
+      let [h, m] = timeInput.value.split(':');
+      let hr = parseInt(h);
+      let ampm = hr >= 12 ? 'PM' : 'AM';
+      let hr12 = hr % 12 || 12;
+      displayTime = `${hr12}:${m} ${ampm}`;
+    }
+
     loadTasks(function (tasks) {
-      tasks.unshift({ id: Date.now(), text, done: false });
+      tasks.unshift({ id: Date.now(), text, time: displayTime, done: false });
       saveTasks(tasks, function () {
         input.value = '';
+        if (timeInput) timeInput.value = '';
         renderTasks();
         input.focus();
       });
@@ -433,6 +446,11 @@ function initTaskDrawer() {
   input.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') addTask();
   });
+  if (timeInput) {
+    timeInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') addTask();
+    });
+  }
 
   list.addEventListener('click', function (e) {
     const item = e.target.closest('.task-item');
