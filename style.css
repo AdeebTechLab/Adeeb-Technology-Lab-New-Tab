@@ -191,22 +191,22 @@ header {
   transform: translateY(0);
   pointer-events: auto;
 }
-
 .google-app-item {
   border: 1px solid transparent;
-  border-radius: 14px;
+  border-radius: 8px; /* 14px se 8px kar diya taake Google jaisa hover effect aaye */
   background: transparent;
   color: #eef2f7;
-  padding: 8px 6px;
+  padding: 8px; /* Clickable area ko balanced rakhne ke liye */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  font-size: 11px;
+  gap: 8px; /* Icon aur text ke darmyan standard fasla */
+  font-size: 14px; /* 11px thoda chota tha, isko standard 14px kar diya */
   font-weight: 500;
   cursor: pointer;
-  min-height: 82px;
+  width: 84px; /* Google ke icon boxes ki fixed width */
+  min-height: 84px; /* 82px se 84px kar diya perfect square ke liye */
   transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
@@ -220,18 +220,14 @@ header {
 }
 
 .google-app-icon {
-  width: 42px;
-  height: 42px;
+  width: 48px; /* 52px se 48px kar diya jo Google icons ka standard size hai */
+  height: 48px; /* Same as width */
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0; /* Padding hata di taake icon pura 48px ka nazar aaye aur chota na ho */
 }
-
 .google-app-item span:last-child {
   max-width: 100%;
   white-space: nowrap;
