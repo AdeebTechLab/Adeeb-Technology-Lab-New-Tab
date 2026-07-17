@@ -14,12 +14,15 @@ function attachDataHrefHandlers() {
 /* CLOCK */
 function updateClock() {
   let now = new Date();
-  const hrs = String(now.getHours()).padStart(2, '0');
+
+  const hrs = String(now.getHours() % 12 || 12).padStart(2, '0');
   const min = String(now.getMinutes()).padStart(2, '0');
   const sec = String(now.getSeconds()).padStart(2, '0');
+
   const hrsEl = document.getElementById("hrs");
   const minEl = document.getElementById("min");
   const secEl = document.getElementById("sec");
+
   if (hrsEl) hrsEl.innerText = hrs;
   if (minEl) minEl.innerText = min;
   if (secEl) secEl.innerText = sec;
@@ -123,16 +126,20 @@ function setLocationLabel(label) {
   loc.innerText = label || DEFAULT_LOCATION_MSG;
 }
 
+function fetchWithTimeout(url, ms = 8000) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), ms);
+  return fetch(url, { signal: controller.signal }).finally(() => clearTimeout(id));
+}
+
 function updateWeatherForCoords(lat, lon) {
   if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`;
-  fetch(url)
+  fetchWithTimeout(url)
     .then(res => res.json())
     .then(data => {
       const w = data?.current_weather;
-      if (w) {
-        setTempValue(w.temperature);
-      }
+      if (w) setTempValue(w.temperature);
     })
     .catch(err => {
       console.error('Weather fetch failed:', err);
@@ -140,44 +147,28 @@ function updateWeatherForCoords(lat, lon) {
     });
 }
 
-function reverseGeocodeCoords(lat, lon, fallbackLabel) {
-  if (fallbackLabel) {
-    setLocationLabel(fallbackLabel);
+// BigDataCloud free client-side reverse geocoding — no API key, works with GPS
+// coords AND as an automatic IP-based fallback when coords aren't available.
+function resolveLocation(lat, lon) {
+  const url = new URL('https://api.bigdatacloud.net/data/reverse-geocode-client');
+  if (Number.isFinite(lat) && Number.isFinite(lon)) {
+    url.searchParams.set('latitude', lat);
+    url.searchParams.set('longitude', lon);
   }
-  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
-  const url = `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&language=en&count=1`;
-  fetch(url)
+  url.searchParams.set('localityLanguage', 'en');
+
+  fetchWithTimeout(url.toString())
     .then(res => res.json())
     .then(data => {
-      const place = data.results && data.results[0];
-      if (place) {
-        const parts = [place.name, place.admin1, place.country].filter(Boolean);
-        setLocationLabel(parts.join(', '));
-      }
+      const cityName = data.city || data.locality || data.principalSubdivision;
+      setLocationLabel(cityName || DEFAULT_LOCATION_MSG);
+
+      const finalLat = Number.isFinite(lat) ? lat : Number(data.latitude);
+      const finalLon = Number.isFinite(lon) ? lon : Number(data.longitude);
+      updateWeatherForCoords(finalLat, finalLon);
     })
     .catch(err => {
-      console.error('Location reverse geocode failed:', err);
-    });
-}
-
-function processCoordinates(lat, lon, hintLabel) {
-  updateWeatherForCoords(lat, lon);
-  reverseGeocodeCoords(lat, lon, hintLabel);
-}
-
-function fallbackToIpLocation() {
-  fetch('https://ipapi.co/json/')
-    .then(res => res.json())
-    .then(data => {
-      const lat = Number(data.latitude);
-      const lon = Number(data.longitude);
-      const parts = [data.city, data.region, data.country_name].filter(Boolean);
-      const label = parts.join(', ') || DEFAULT_LOCATION_MSG;
-      setLocationLabel(label);
-      processCoordinates(lat, lon, label);
-    })
-    .catch(err => {
-      console.error('IP fallback failed:', err);
+      console.error('Location lookup failed:', err);
       setLocationLabel(DEFAULT_LOCATION_MSG);
       setTempValue(NaN);
     });
@@ -185,22 +176,60 @@ function fallbackToIpLocation() {
 
 function handleGeolocationError(err) {
   console.warn('Geolocation error:', err);
-  setLocationLabel('Using approximate location');
-  fallbackToIpLocation();
+  resolveLocation(NaN, NaN); // falls back to IP-based location automatically
 }
 
 function initLocationAndWeather() {
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(
-      (pos) => processCoordinates(pos.coords.latitude, pos.coords.longitude),
+      (pos) => resolveLocation(pos.coords.latitude, pos.coords.longitude),
       handleGeolocationError,
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+      { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
     );
   } else {
-    setLocationLabel('Geolocation not supported');
-    fallbackToIpLocation();
+    resolveLocation(NaN, NaN);
   }
 }
+
+function initBatteryStatus() {
+  if (!('getBattery' in navigator)) {
+    const box = document.getElementById('batteryBox');
+    if (box) box.style.display = 'none';
+    return;
+  }
+
+  navigator.getBattery().then(function (battery) {
+    const CIRC = 97.39;
+    const ring = document.getElementById('batteryRingProgress');
+    const text = document.getElementById('batteryText');
+    const icon = document.getElementById('batteryIcon');
+
+    function update() {
+      const percent = Math.round(battery.level * 100);
+      const offset = CIRC - (CIRC * percent) / 100;
+      if (ring) {
+        ring.style.strokeDashoffset = offset;
+        ring.style.stroke = (percent <= 20 && !battery.charging) ? '#ef4444' : '#ff8e01';
+      }
+      if (text) text.textContent = percent + '%';
+      if (icon) {
+        icon.className = battery.charging
+          ? 'fa-solid fa-bolt battery-ring-icon charging'
+          : 'fa-solid fa-bolt-lightning battery-ring-icon';
+      }
+    }
+
+    update();
+    battery.addEventListener('levelchange', update);
+    battery.addEventListener('chargingchange', update);
+  }).catch(function () {
+    const box = document.getElementById('batteryBox');
+    if (box) box.style.display = 'none';
+  });
+}
+
+
+
 
 /* INIT on DOM ready */
 function initNewTab() {
@@ -209,6 +238,7 @@ function initNewTab() {
   attachVoice();
   attachCameraAndAiMode();
   initLocationAndWeather();
+  initBatteryStatus();
   updateClock();
   setInterval(updateClock, 1000);
   loadPhoneUI();
@@ -390,6 +420,69 @@ function initGoogleAppsMenu() {
   });
 }
 
+function initGoogleAppsReorder() {
+  const grid = document.getElementById('googleAppsMenu');
+  if (!grid) return;
+  const STORAGE_KEY = 'google_apps_order_v1';
+
+  function applySavedOrder() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    let order;
+    try { order = JSON.parse(raw); } catch (e) { return; }
+    if (!Array.isArray(order)) return;
+
+    const items = Array.from(grid.querySelectorAll('.google-app-item'));
+    const byUrl = new Map(items.map(el => [el.getAttribute('data-url'), el]));
+
+    order.forEach(url => {
+      const el = byUrl.get(url);
+      if (el) grid.appendChild(el);
+    });
+  }
+
+  function saveCurrentOrder() {
+    const items = Array.from(grid.querySelectorAll('.google-app-item'));
+    const order = items.map(el => el.getAttribute('data-url'));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(order));
+  }
+
+  let draggedEl = null;
+
+  function attachDragHandlers(item) {
+    item.setAttribute('draggable', 'true');
+
+    item.addEventListener('dragstart', function (e) {
+      draggedEl = item;
+      item.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      try { e.dataTransfer.setData('text/plain', item.getAttribute('data-url') || ''); } catch (err) {}
+    });
+
+    item.addEventListener('dragend', function () {
+      item.classList.remove('dragging');
+      draggedEl = null;
+      saveCurrentOrder();
+    });
+
+    item.addEventListener('dragover', function (e) {
+      e.preventDefault();
+      if (!draggedEl || draggedEl === item) return;
+      const rect = item.getBoundingClientRect();
+      const midX = rect.left + rect.width / 2;
+      const before = e.clientX < midX;
+      grid.insertBefore(draggedEl, before ? item : item.nextSibling);
+    });
+
+    item.addEventListener('drop', function (e) {
+      e.preventDefault();
+    });
+  }
+
+  grid.querySelectorAll('.google-app-item').forEach(attachDragHandlers);
+  applySavedOrder();
+}
+
 function initTaskDrawer() {
   const openBtn = document.getElementById('todoBtn');
   const overlay = document.getElementById('taskDrawerOverlay');
@@ -466,29 +559,31 @@ function initTaskDrawer() {
     });
   }
 
-  function addTask() {
-    const text = input.value.trim();
-    if (!text) return;
+ function addTask() {
+  const text = input.value.trim();
+  if (!text) return;
 
-    let displayTime = '';
-    if (timeInput && timeInput.value) {
-      let [h, m] = timeInput.value.split(':');
-      let hr = parseInt(h);
-      let ampm = hr >= 12 ? 'PM' : 'AM';
-      let hr12 = hr % 12 || 12;
-      displayTime = `${hr12}:${m} ${ampm}`;
-    }
-
-    loadTasks(function (tasks) {
-      tasks.unshift({ id: Date.now(), text, time: displayTime, done: false });
-      saveTasks(tasks, function () {
-        input.value = '';
-        if (timeInput) timeInput.value = '';
-        renderTasks();
-        input.focus();
-      });
-    });
+  let displayTime = '';
+  let rawTime = '';
+  if (timeInput && timeInput.value) {
+    rawTime = timeInput.value; 
+    let [h, m] = timeInput.value.split(':');
+    let hr = parseInt(h);
+    let ampm = hr >= 12 ? 'PM' : 'AM';
+    let hr12 = hr % 12 || 12;
+    displayTime = `${hr12}:${m} ${ampm}`;
   }
+
+  loadTasks(function (tasks) {
+    tasks.unshift({ id: Date.now(), text, time: displayTime, rawTime, done: false });
+    saveTasks(tasks, function () {
+      input.value = '';
+      if (timeInput) timeInput.value = '';
+      renderTasks();
+      input.focus();
+    });
+  });
+}
 
   function toggleTask(id) {
     loadTasks(function (tasks) {
@@ -608,9 +703,12 @@ function initAiToolsDrawer() {
     });
   }
 
-  function getToolIcon(url) {
+ function getToolIcon(url) {
     try {
       const host = new URL(url).hostname;
+      if (host.includes('copilot.microsoft.com') || host.includes('bing.com')) {
+        return 'https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/microsoft-copilot.png';
+      }
       return `https://www.google.com/s2/favicons?domain=${host}&sz=64`;
     } catch {
       return `https://www.google.com/s2/favicons?domain=google.com&sz=64`;
@@ -796,6 +894,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (saveSettingsBtn) saveSettingsBtn.addEventListener('click', saveSettings);
   if (cancelSettingsBtn) cancelSettingsBtn.addEventListener('click', closeSettings);
   initGoogleAppsMenu();
+  initGoogleAppsReorder();
   initTaskDrawer();
   initAiToolsDrawer();
   initLiveChatPopup();
@@ -850,6 +949,30 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+function adjustShortcutsScale(totalCount) {
+  if (!shortcutsGrid) return;
+  let icon, itemWidth, font, gap, iconFont, maxHeight;
+
+  if (totalCount <= 6) {
+    icon = 55; itemWidth = 80; font = 13; gap = 24; iconFont = 22; maxHeight = 100;
+  } else if (totalCount <= 10) {
+    icon = 46; itemWidth = 68; font = 12; gap = 18; iconFont = 19; maxHeight = 168;
+  } else if (totalCount <= 14) {
+    icon = 40; itemWidth = 58; font = 11; gap = 14; iconFont = 17; maxHeight = 148;
+  } else if (totalCount <= 20) {
+    icon = 34; itemWidth = 50; font = 10; gap = 10; iconFont = 15; maxHeight = 128;
+  } else {
+    icon = 28; itemWidth = 44; font = 9; gap = 8; iconFont = 13; maxHeight = 158;
+  }
+
+  shortcutsGrid.style.setProperty('--sc-icon', icon + 'px');
+  shortcutsGrid.style.setProperty('--sc-item-width', itemWidth + 'px');
+  shortcutsGrid.style.setProperty('--sc-font', font + 'px');
+  shortcutsGrid.style.setProperty('--sc-gap', gap + 'px');
+  shortcutsGrid.style.setProperty('--sc-icon-font', iconFont + 'px');
+  shortcutsGrid.style.setProperty('--sc-max-height', maxHeight + 'px');
+}
+
   function renderShortcuts() {
     if (!shortcutsGrid) return;
     const shortcuts = loadShortcuts();
@@ -897,6 +1020,7 @@ document.addEventListener("DOMContentLoaded", function () {
       wrapper.appendChild(delBtn);
       shortcutsGrid.appendChild(wrapper);
     });
+    
 
     // Add the "Add Shortcut" button
     const addBtn = document.createElement('div');
@@ -908,6 +1032,7 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
     addBtn.onclick = openModal;
     shortcutsGrid.appendChild(addBtn);
+    adjustShortcutsScale(shortcuts.length + 1);
   }
 
   function openModal() {
@@ -972,5 +1097,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   renderShortcuts();
+
+
+ 
+
 
 });

@@ -23,10 +23,15 @@
     "chrome_url_overrides": {
       "newtab": "index.html"
     },
-    "permissions": [
-      "storage",
-      "geolocation",
-      "tabs"
-    ]
+   "permissions": [
+  "storage",
+  "geolocation",
+  "tabs"
+],
+
+  "host_permissions": [
+  "https://api.open-meteo.com/*",
+  "https://api.bigdatacloud.net/*"
+]
 
   }

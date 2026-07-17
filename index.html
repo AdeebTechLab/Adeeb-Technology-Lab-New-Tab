@@ -14,9 +14,7 @@
 </head>
 
 <body>
-
   <header>
-    <!-- <button class="header-btn" onclick="window.open('https://tasks.google.com/tasks','_blank')">Todo</button> -->
     <button class="header-btn" id="todoBtn">Daily Tasks</button>
 
     <div class="logo-area">
@@ -193,38 +191,47 @@
 
     <!-- LEFT -->
     <div class="lms-section">
+<a class="lms-login-bar" href="https://lms-adeeb-technology-lab.vercel.app/login" target="_self">
+  <img src="Assets/ATLabLogo.png" class="lms-login-logo" alt="Adeeb Tech Lab">
+  <span class="lms-login-label">Login to LMS</span>
+  <span class="lms-login-cta">Open <i class="fa-solid fa-arrow-right"></i></span>
+</a>
 
-      <div class="lms-top-cards">
-        <div class="lms-card">
-          <a href="https://lms-adeeb-technology-lab.vercel.app/login" target="_self"
-            style="text-decoration:none; color:inherit;">
-            <img src="Assets/student.png" class="lms-icon">
-            <div class="lms-info">
-              <h4>Courses</h4>
-            </div>
-          </a>
-        </div>
+<div class="more-apps-divider reg-forms-divider">
+  <span class="more-app">Registration Forms</span>
+</div>
 
-        <div class="lms-card">
-          <a href="https://lms-adeeb-technology-lab.vercel.app/login" target="_self"
-            style="text-decoration:none; color:inherit;">
-            <img src="Assets/internship.png" class="lms-icon">
-            <div class="lms-info">
-              <h4>Internship</h4>
-            </div>
-          </a>
-        </div>
+<div class="lms-top-cards">
+  <div class="lms-card lms-card--courses">
+    <a href="https://lms-adeeb-technology-lab.vercel.app/register/student" target="_self">
+       <img src="assets/student.png" class="lms-icon-img" alt="Student">
+      <span class="lms-card-label">Courses</span>
+    </a>
+  </div>
 
-        <div class="lms-card">
-          <a href="https://lms-adeeb-technology-lab.vercel.app/login" target="_self"
-            style="text-decoration:none; color:inherit;">
-            <img src="Assets/job.png" class="lms-icon">
-            <div class="lms-info">
-              <h4>Job</h4>
-            </div>
-          </a>
-        </div>
-      </div>
+  <div class="lms-card lms-card--internship">
+    <a href="https://lms-adeeb-technology-lab.vercel.app/register/internship" target="_self">
+       <img src="assets/internship.png" class="lms-icon-img" alt="Internship">
+      <span class="lms-card-label">Internship</span>
+    </a>
+  </div>
+
+  <div class="lms-card lms-card--job">
+    <a href="https://lms-adeeb-technology-lab.vercel.app/register/job" target="_self">
+       <img src="assets/job.png" class="lms-icon-img" alt="Job">
+      <span class="lms-card-label">Job</span>
+    </a>
+  </div>
+
+  <div class="lms-card lms-card--teacher">
+    <a href="https://lms-adeeb-technology-lab.vercel.app/register/teacher" target="_self">
+       <img src="assets/teacher.png" class="lms-icon-img" alt="Teacher">
+      <span class="lms-card-label">Teacher</span>
+    </a>
+  </div>
+</div>
+
+
 
       <div class="more-apps-divider">
         <span class="more-app">Free Courses</span>
@@ -429,23 +436,37 @@
     <!-- RIGHT -->
     <div class="content-section">
 
-      <div class="time-date-wrapper">
-        <div class="timer-box">
-          <div class="time" id="hrs">00</div>
-          <div class="time" id="min">00</div>
-          <div class="time" id="sec">00</div>
-        </div>
+     <div class="time-date-wrapper">
+  <div class="timer-box">
+    <div class="time" id="hrs">00</div>
+    <div class="time" id="min">00</div>
+    <div class="time" id="sec">00</div>
+  </div>
 
-        <div class="date-location-stack">
-          <div class="date-box" id="todayDate"></div>
+  <div class="date-location-stack">
+    <div class="date-row">
+      <div class="date-box" id="todayDate"></div>
+    </div>
 
-          <div class="location-area">
-            <div class="loc-box"><i class="fa-solid fa-temperature-three-quarters"></i> <span id="tempVal">--°C</span>
-            </div>
-            <div class="loc-box"><i class="fa-solid fa-location-dot"></i> <span id="locationName">Detecting city...</span></div>
-          </div>
-        </div>
+    <div class="location-area">
+      <div class="loc-box"><i class="fa-solid fa-temperature-three-quarters"></i> <span id="tempVal">--°C</span>
       </div>
+      <div class="loc-box"><i class="fa-solid fa-location-dot"></i> <span id="locationName">Detecting city...</span></div>
+       
+      <div class="loc-box battery-box" id="batteryBox">
+    <div class="battery-ring">
+      <svg viewBox="0 0 36 36" class="battery-ring-svg">
+        <circle class="battery-ring-track" cx="18" cy="18" r="15.5"></circle>
+        <circle class="battery-ring-progress" id="batteryRingProgress" cx="18" cy="18" r="15.5"></circle>
+      </svg>
+      <i class="fa-solid fa-laptop battery-ring-icon" id="batteryIcon"></i>
+    </div>
+    <span id="batteryText">--%</span>
+  </div>
+
+    </div>
+  </div>
+</div>
 
       <div class="search-container">
         <i class="fa-solid fa-magnifying-glass search-icon"></i>
@@ -465,7 +486,7 @@
         <!-- Rendered dynamically by newtab.js -->
       </div>
 
-      <div class="more-apps-divider">
+      <div class="more-apps-divider ">
         <span class="more-app">More Apps</span>
       </div>
 
@@ -490,9 +511,6 @@
 
   <footer>
     <div class="footer-buttons">
-      <!-- <button class="footer-btn" onclick="window.open('https://salmanadeeb.wixsite.com/livechat','_blank')">Live Chat</button>
-<button class="footer-btn" onclick="window.open('https://chat.openai.com/','_blank')">AI Tools</button>
-</div> -->
 
       <button class="footer-btn" id="liveChatBtn">Live Chat</button>
       <div class="footer-socials">
@@ -520,6 +538,7 @@
           title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
       </div>
       <button class="footer-btn" id="aiToolsBtn">AI Tools</button>
+      </div>
   </footer>
 
   <div class="task-drawer-overlay" id="taskDrawerOverlay">
